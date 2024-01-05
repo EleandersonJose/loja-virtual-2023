@@ -6,31 +6,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dev.backend.entity.Permissao;
 import com.dev.backend.entity.PermissaoPessoa;
+import com.dev.backend.entity.Pessoa;
 import com.dev.backend.repository.PermissaoPessoaRepository;
+import com.dev.backend.repository.PermissaoRepository;
 
 @Service
 public class PermissaoPessoaService {
 
     @Autowired
-    private PermissaoPessoaRepository repository;
+    private PermissaoPessoaRepository permissaoPessoaRepository;
 
-    public List<PermissaoPessoa> buscarTodos() {
-        return repository.findAll();
-    }
+    @Autowired
+    private PermissaoRepository permissaoRepository;
 
-    public PermissaoPessoa inserir(PermissaoPessoa obj) {
-        obj.setDataCriacao(new Date());
-        return repository.saveAndFlush(obj);
-    }
-
-    public PermissaoPessoa alterar(PermissaoPessoa obj) {
-        obj.setDataAtualizacao(new Date());
-        return repository.saveAndFlush(obj);
-    }
-
-    public void excluir(Long id) {
-        PermissaoPessoa obj = repository.findById(id).get();
-        repository.delete(obj);
+    public void vincularPessoaPermissaoCliente(Pessoa pessoa) {
+        List<Permissao> listaPermissao = permissaoRepository.findByNome("cliente");
+        if (listaPermissao.size() > 0) {
+            PermissaoPessoa permissaoPessoa = new PermissaoPessoa();
+            permissaoPessoa.setPessoa(pessoa);
+            permissaoPessoa.setPermissao(listaPermissao.get(0));
+            permissaoPessoa.setDataCriacao(new Date());
+            permissaoPessoaRepository.saveAndFlush(permissaoPessoa);
+        }
     }
 }
