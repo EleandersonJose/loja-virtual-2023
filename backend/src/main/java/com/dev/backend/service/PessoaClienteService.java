@@ -1,6 +1,8 @@
 package com.dev.backend.service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,14 @@ public class PessoaClienteService {
         Pessoa objetoNovo = pessoaClienteRepository.saveAndFlush(pessoa);
         permissaoPessoaService.vincularPessoaPermissaoCliente(objetoNovo);
 
-        emailService.enviarEmailTexto(objetoNovo.getEmail(),
-                "Cadastro na Loja realizado, em breve  voce recebera a senha de acesso por email",
-                "O registro foi realizado com sucesso");
+        // emailService.enviarEmailTexto(objetoNovo.getEmail(),
+        // "Cadastro na Loja realizado, em breve voce recebera a senha de acesso por
+        // email",
+        // "O registro foi realizado com sucesso");
+        Map<String, Object> proprMap = new HashMap<>();
+        proprMap.put("nome", objetoNovo.getNome());
+        proprMap.put("mensagem", "O registro foi realizado com sucesso");
+        emailService.enviarEmailTemplate(objetoNovo.getEmail(), "Cadastro na Loja realizado", proprMap);
 
         return objetoNovo;
     }

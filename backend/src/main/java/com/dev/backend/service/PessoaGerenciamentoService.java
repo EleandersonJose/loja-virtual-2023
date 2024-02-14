@@ -27,7 +27,7 @@ public class PessoaGerenciamentoService {
         pessoaRepository.saveAndFlush(pessoa);
 
         emailService.enviarEmailTexto(pessoa.getEmail(), "Código de Recuperação de Senha",
-                "Segue abaixo o código para recuperação de senha" + pessoa.getCodigoRecuperacaoSenha());
+                "Segue abaixo o código para recuperação de senha " + pessoa.getCodigoRecuperacaoSenha());
 
         return "Código enviado!";
     }
@@ -50,7 +50,7 @@ public class PessoaGerenciamentoService {
                 return "Tempo expirado, solicite um novo codigo";
             }
         } else {
-            return "Email ou codigo nao encont5ados!";
+            return "Email ou codigo nao encontrados!";
         }
     }
 
